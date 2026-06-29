@@ -1,0 +1,29 @@
+# ============================================
+# Multivariate Analysis - Correlation Heatmap
+# ============================================
+
+# Import visualization libraries
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Select only numerical columns
+numerical_data = app.select_dtypes(include=['int64', 'float64'])
+
+# Create the correlation matrix
+correlation_matrix = numerical_data.corr()
+
+# Plot the correlation heatmap
+plt.figure(figsize=(10, 8))
+sns.heatmap(
+    correlation_matrix,
+    annot=True,
+    cmap='coolwarm',
+    fmt='.2f',
+    linewidths=0.5
+)
+
+# Add title
+plt.title("Correlation Heatmap of Numerical Features")
+
+# Display the plot
+plt.show()
