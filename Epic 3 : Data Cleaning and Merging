@@ -1,0 +1,125 @@
+import pandas as pd
+import numpy as np
+
+# Function for cleaning application data
+def data_cleaning(application_df):
+
+    # Create a new feature representing family dependency
+    application_df['DEPENDENCY_SIZE'] = (
+        application_df['CNT_FAM_MEMBERS'] +
+        application_df['CNT_CHILDREN']
+    )
+
+    # Convert negative values to positive
+    application_df['DAYS_BIRTH'] = application_df['DAYS_BIRTH'].abs()
+    application_df['DAYS_EMPLOYED'] = application_df['DAYS_EMPLOYED'].abs()
+
+    # Remove unnecessary columns
+    columns_to_drop = [
+        'FLAG_MOBIL',
+        'OCCUPATION_TYPE'
+    ]
+
+    for col in columns_to_drop:
+        if col in application_df.columns:
+            application_df.drop(col, axis=1, inplace=True)
+
+    # Map categorical columns into numerical labels
+
+    housing_map = {
+        'House / apartment': 0,
+        'With parents': 1,
+        'Municipal apartment': 2,
+        'Rented apartment': 3,
+        'Office apartment': 4,
+        'Co-op apartment': 5
+    }
+
+    income_map = {
+        'Working': 0,
+        'Commercial associate': 1,
+        'Pensioner': 2,
+        'State servant': 3,
+        'Student': 4
+    }
+
+    education_map = {
+        'Lower secondary': 0,
+        'Secondary / secondary special': 1,
+        'Incomplete higher': 2,
+        'Higher education': 3,
+        'Academic degree': 4
+    }
+
+    family_map = {
+        'Single / not married': 0,
+        'Married': 1,
+        'Civil marriage': 2,
+        'Separated': 3,
+        'Widow': 4
+    }
+
+    # Apply mappings
+    application_df['NAME_HOUSING_TYPE'] = (
+        application_df['NAME_HOUSING_TYPE'].map(housing_map)
+    )
+
+    application_df['NAME_INCOME_TYPE'] = (
+        application_df['NAME_INCOME_TYPE'].map(income_map)
+    )
+
+    application_df['NAME_EDUCATION_TYPE'] = (
+        application_df['NAME_EDUCATION_TYPE'].map(education_map)
+    )
+
+    application_df['NAME_FAMILY_STATUS'] = (
+        application_df['NAME_FAMILY_STATUS'].map(family_map)
+    )
+
+    return application_df
+
+
+# Function for cleaning credit record data
+def credit_record_cleaning(credit_df):
+
+    # Group data using customer ID
+    credit_group = credit_df.groupby('ID')
+
+    # Create new features
+    credit_features = pd.DataFrame()
+
+    credit_features['open_month'] = credit_group['MONTHS_BALANCE'].min()
+    credit_features['end_months'] = credit_group['MONTHS_BALANCE'].max()
+
+    credit_features['window'] = (
+        credit_features['end_months'] -
+        credit_features['open_month']
+    )
+
+    # Function to determine payment behaviour
+    def payment_status(status):
+        status = list(status)
+
+        if any(x in ['1', '2', '3', '4', '5'] for x in status):
+            return 1      # Overdue payment
+        elif '0' in status:
+            return 0      # Timely payment
+        else:
+            return -1     # No loan record
+
+    credit_features['STATUS'] = (
+        credit_group['STATUS']
+        .apply(payment_status)
+    )
+
+    credit_features.reset_index(inplace=True)
+
+    return credit_features
+
+
+# Example usage
+application_df = data_cleaning(application_df)
+credit_features = credit_record_cleaning(credit_df)
+
+print(application_df.head())
+print(credit_features.head())
