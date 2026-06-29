@@ -1,0 +1,32 @@
+# ============================================
+# Univariate Analysis - Occupation Type
+# ============================================
+
+# Display the frequency of each occupation category
+print("Number of people working in different occupations:\n")
+print(app['OCCUPATION_TYPE'].value_counts())
+
+# Import visualization libraries
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set figure size
+plt.figure(figsize=(18, 6))
+
+# Plot the distribution of occupation types
+sns.countplot(
+    x='OCCUPATION_TYPE',
+    data=app,
+    palette='Set2',
+    order=app['OCCUPATION_TYPE'].value_counts().index
+)
+
+# Customize the graph
+plt.title("Distribution of Applicant Occupation Types")
+plt.xlabel("Occupation Type")
+plt.ylabel("Count")
+plt.xticks(rotation=90)
+plt.tight_layout()
+
+# Display the plot
+plt.show()
