@@ -1,0 +1,80 @@
+from flask import Flask, render_template, request
+import numpy as np
+import pickle
+
+# Initialize Flask application
+app = Flask(__name__)
+
+# Load the trained machine learning model
+model = pickle.load(open('credit_card_model.pkl', 'rb'))
+
+# ---------------- HOME PAGE ----------------
+@app.route('/')
+def home():
+    return render_template('home.html')
+
+
+# ---------------- PREDICTION FORM PAGE ----------------
+@app.route('/predict')
+def predict_page():
+    return render_template('index.html')
+
+
+# ---------------- RESULT PAGE ----------------
+@app.route('/result', methods=['POST'])
+def result():
+
+    if request.method == 'POST':
+        try:
+            # Collect user inputs from the form
+            gender = int(request.form['gender'])
+            own_car = int(request.form['own_car'])
+            own_realty = int(request.form['own_realty'])
+            income_type = int(request.form['income_type'])
+            education_type = int(request.form['education_type'])
+            family_status = int(request.form['family_status'])
+            housing_type = int(request.form['housing_type'])
+            income = float(request.form['income'])
+            age = int(request.form['age'])
+            family_members = int(request.form['family_members'])
+            children = int(request.form['children'])
+
+            # Arrange inputs for prediction
+            features = np.array([
+                gender,
+                own_car,
+                own_realty,
+                income_type,
+                education_type,
+                family_status,
+                housing_type,
+                income,
+                age,
+                family_members,
+                children
+            ]).reshape(1, -1)
+
+            # Generate prediction
+            prediction = model.predict(features)
+
+            # Convert prediction into readable text
+            if prediction[0] == 1:
+                result = "Credit Card Application Approved"
+            else:
+                result = "Credit Card Application Rejected"
+
+            return render_template(
+                'result.html',
+                prediction_text=result
+            )
+
+        except Exception as e:
+            return render_template(
+                'result.html',
+                prediction_text=f"Error: {e}"
+            )
+
+
+# ---------------- RUN FLASK APPLICATION ----------------
+if __name__ == "__main__":
+    app.run(debug=True)
