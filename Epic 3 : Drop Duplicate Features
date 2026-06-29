@@ -1,0 +1,38 @@
+# ============================================
+# Removing Duplicate Records and Drop Duplicate Features
+# ============================================
+
+# Check the number of records before removing duplicates
+print("Shape before removing duplicates:", app.shape)
+
+# Remove duplicate applicant records
+app.drop_duplicates(
+    subset=[
+        'CODE_GENDER',
+        'FLAG_OWN_CAR',
+        'FLAG_OWN_REALTY',
+        'CNT_CHILDREN',
+        'AMT_INCOME_TOTAL',
+        'NAME_INCOME_TYPE',
+        'NAME_EDUCATION_TYPE',
+        'NAME_FAMILY_STATUS',
+        'NAME_HOUSING_TYPE',
+        'DAYS_BIRTH',
+        'DAYS_EMPLOYED',
+        'FLAG_MOBIL',
+        'FLAG_WORK_PHONE',
+        'FLAG_PHONE',
+        'FLAG_EMAIL',
+        'OCCUPATION_TYPE',
+        'CNT_FAM_MEMBERS'
+    ],
+    keep='first',
+    inplace=True
+)
+
+# Check the number of records after removing duplicates
+print("Shape after removing duplicates:", app.shape)
+
+# Display the first five records
+print("\nUpdated Dataset:")
+print(app.head())
