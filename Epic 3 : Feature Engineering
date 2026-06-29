@@ -1,0 +1,50 @@
+import pandas as pd
+
+# ---------------------------------------------------
+# 1. Convert Multi-Class PAYMENT STATUS to Binary
+# ---------------------------------------------------
+
+def to_binary(status):
+    """
+    Good payment or no loan record  -> Approved (1)
+    Overdue or bad debt            -> Not Approved (0)
+    """
+
+    if status in ['0', 'X', 'C']:
+        return 1
+    else:
+        return 0
+
+# Create binary target column
+credit_df['STATUS_BIN'] = credit_df['STATUS'].apply(to_binary)
+
+# Display class distribution
+print("Binary Status Distribution:")
+print(credit_df['STATUS_BIN'].value_counts())
+
+# ---------------------------------------------------
+# 2. Merge the cleaned datasets on Applicant ID
+# ---------------------------------------------------
+
+final_df = pd.merge(
+    credit_df,
+    application_df,
+    how='left',
+    on='ID'
+)
+
+print(f"\nMerged Shape: {final_df.shape}")
+
+# ---------------------------------------------------
+# 3. Preview the merged dataset
+# ---------------------------------------------------
+
+print("\nFirst Five Rows:")
+print(final_df.head())
+
+# ---------------------------------------------------
+# 4. Check missing values after merging
+# ---------------------------------------------------
+
+print("\nMissing values in each column:")
+print(final_df.isnull().sum().sort_values(ascending=False))
