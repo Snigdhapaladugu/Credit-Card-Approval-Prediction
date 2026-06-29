@@ -1,0 +1,68 @@
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+def d_tree(X_train, X_test, y_train, y_test):
+    """
+    Builds, trains, tests, and evaluates a Decision Tree classification model.
+
+    Parameters:
+        X_train : Training feature dataset
+        X_test  : Testing feature dataset
+        y_train : Training labels
+        y_test  : Testing labels
+
+    Returns:
+        dt_model : Trained Decision Tree model
+        y_pred   : Predictions on the test set
+    """
+
+    # ---------------- MODEL INITIALIZATION ----------------
+    print("Initializing Decision Tree Classifier...")
+    dt_model = DecisionTreeClassifier(random_state=42)
+
+    # ---------------- MODEL TRAINING ----------------
+    print("Training Decision Tree model...")
+    dt_model.fit(X_train, y_train)
+
+    # ---------------- PREDICTION ----------------
+    print("Generating predictions...")
+    y_pred = dt_model.predict(X_test)
+
+    # ---------------- MODEL EVALUATION ----------------
+    print("\n" + "=" * 40)
+    print("Decision Tree Model Evaluation")
+    print("=" * 40)
+
+    # Confusion Matrix
+    cm = confusion_matrix(y_test, y_pred)
+    print("\nConfusion Matrix:")
+    print(cm)
+
+    # Classification Report
+    print("\nClassification Report:")
+    print(classification_report(y_test, y_pred))
+
+    # Accuracy Score
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"\nAccuracy: {accuracy:.4f}")
+
+    # Visualize Confusion Matrix
+    plt.figure(figsize=(6, 5))
+    sns.heatmap(
+        cm,
+        annot=True,
+        fmt='d',
+        cmap='Blues',
+        cbar=False,
+        xticklabels=['Not Approved', 'Approved'],
+        yticklabels=['Not Approved', 'Approved']
+    )
+
+    plt.xlabel('Predicted Label')
+    plt.ylabel('True Label')
+    plt.title('Confusion Matrix - Decision Tree')
+    plt.show()
+
+    return dt_model, y_pred
