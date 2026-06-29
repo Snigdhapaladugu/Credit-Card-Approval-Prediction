@@ -1,0 +1,33 @@
+from sklearn.preprocessing import LabelEncoder
+
+# Create LabelEncoder objects
+cg = LabelEncoder()
+oc = LabelEncoder()
+own_r = LabelEncoder()
+it = LabelEncoder()
+et = LabelEncoder()
+fs = LabelEncoder()
+ht = LabelEncoder()
+
+# Apply Label Encoding to categorical columns
+credit_app['CODE_GENDER'] = cg.fit_transform(credit_app['CODE_GENDER'])
+credit_app['FLAG_OWN_CAR'] = oc.fit_transform(credit_app['FLAG_OWN_CAR'])
+credit_app['FLAG_OWN_REALTY'] = own_r.fit_transform(credit_app['FLAG_OWN_REALTY'])
+credit_app['NAME_INCOME_TYPE'] = it.fit_transform(credit_app['NAME_INCOME_TYPE'])
+credit_app['NAME_EDUCATION_TYPE'] = et.fit_transform(credit_app['NAME_EDUCATION_TYPE'])
+credit_app['NAME_FAMILY_STATUS'] = fs.fit_transform(credit_app['NAME_FAMILY_STATUS'])
+credit_app['NAME_HOUSING_TYPE'] = ht.fit_transform(credit_app['NAME_HOUSING_TYPE'])
+
+# Display first few rows after encoding
+print("Encoded Dataset:")
+print(credit_app.head())
+
+# Display the unique encoded values for each column
+print("\nUnique Encoded Categories:")
+print("CODE_GENDER:", credit_app['CODE_GENDER'].unique())
+print("FLAG_OWN_CAR:", credit_app['FLAG_OWN_CAR'].unique())
+print("FLAG_OWN_REALTY:", credit_app['FLAG_OWN_REALTY'].unique())
+print("NAME_INCOME_TYPE:", credit_app['NAME_INCOME_TYPE'].unique())
+print("NAME_EDUCATION_TYPE:", credit_app['NAME_EDUCATION_TYPE'].unique())
+print("NAME_FAMILY_STATUS:", credit_app['NAME_FAMILY_STATUS'].unique())
+print("NAME_HOUSING_TYPE:", credit_app['NAME_HOUSING_TYPE'].unique())
