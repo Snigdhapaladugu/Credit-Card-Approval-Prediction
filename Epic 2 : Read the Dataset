@@ -1,0 +1,28 @@
+# ============================================
+# Reading the Dataset
+# ============================================
+
+# Import pandas library
+import pandas as pd
+
+# Load the datasets
+app = pd.read_csv("application_record.csv")
+credit = pd.read_csv("credit_record.csv")
+
+# Display the first five records
+print("Application Dataset")
+print(app.head())
+
+print("\nCredit Dataset")
+print(credit.head())
+
+# Display the dimensions of the datasets
+print("\nApplication Dataset Shape:", app.shape)
+print("Credit Dataset Shape:", credit.shape)
+
+# Display dataset information
+print("\nApplication Dataset Info")
+app.info()
+
+print("\nCredit Dataset Info")
+credit.info()
