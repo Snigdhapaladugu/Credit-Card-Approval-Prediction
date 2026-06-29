@@ -1,0 +1,30 @@
+# Check for missing values in the dataset
+
+# Total number of missing values in each column
+print("Missing Values Count:")
+print(df.isnull().sum())
+
+# Percentage (proportion) of missing values in each column
+print("\nMissing Values Ratio:")
+print(df.isnull().mean())
+
+# Display columns that contain missing values
+missing_cols = df.columns[df.isnull().any()]
+print("\nColumns with Missing Values:")
+print(missing_cols)
+
+# Since OCCUPATION_TYPE contains many missing values
+# and is not required for model training, remove it.
+if 'OCCUPATION_TYPE' in df.columns:
+    df.drop('OCCUPATION_TYPE', axis=1, inplace=True)
+    print("\n'OCCUPATION_TYPE' column has been removed.")
+
+# Verify that no missing values remain
+print("\nRemaining Missing Values:")
+print(df.isnull().sum())
+
+# Final check
+if df.isnull().sum().sum() == 0:
+    print("\nDataset is clean. No missing values remain.")
+else:
+    print("\nSome missing values are still present in the dataset.")
