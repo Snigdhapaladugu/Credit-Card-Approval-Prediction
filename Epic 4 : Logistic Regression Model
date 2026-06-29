@@ -1,0 +1,55 @@
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+def logistic_reg(X_train, X_test, y_train, y_test):
+    """
+    Builds, trains, tests, and evaluates a Logistic Regression model.
+    Returns the trained model and predictions.
+    """
+
+    # ---------------- MODEL INITIALIZATION ----------------
+    print("Initializing Logistic Regression Classifier...")
+    lr_model = LogisticRegression(random_state=42, max_iter=1000)
+
+    # ---------------- MODEL TRAINING ----------------
+    print("Training the Logistic Regression model...")
+    lr_model.fit(X_train, y_train)
+
+    # ---------------- PREDICTION ----------------
+    print("Generating predictions on test data...")
+    y_pred = lr_model.predict(X_test)
+
+    # ---------------- MODEL EVALUATION ----------------
+    print("\nConfusion Matrix:")
+    cm = confusion_matrix(y_test, y_pred)
+    print(cm)
+
+    # Visualize Confusion Matrix
+    plt.figure(figsize=(6, 5))
+    sns.heatmap(
+        cm,
+        annot=True,
+        fmt='d',
+        cmap='Blues',
+        cbar=False,
+        xticklabels=['Not Approved', 'Approved'],
+        yticklabels=['Not Approved', 'Approved']
+    )
+
+    plt.xlabel('Predicted Label')
+    plt.ylabel('True Label')
+    plt.title('Confusion Matrix - Logistic Regression')
+    plt.show()
+
+    # Classification Report
+    print("\nClassification Report:")
+    print(classification_report(y_test, y_pred))
+
+    # Accuracy Score
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"Accuracy: {accuracy:.4f}")
+
+    return lr_model, y_pred
