@@ -1,0 +1,19 @@
+# ============================================
+# Descriptive Analysis
+# ============================================
+
+# Display descriptive statistics of numerical features
+print("Descriptive Statistics of the Dataset:\n")
+print(app.describe())
+
+# Display descriptive statistics including categorical features
+print("\nDescriptive Statistics for All Features:\n")
+print(app.describe(include='all'))
+
+# Display dataset shape
+print("\nDataset Shape:")
+print(app.shape)
+
+# Display data types
+print("\nData Types:")
+print(app.dtypes)
