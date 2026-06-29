@@ -1,0 +1,74 @@
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+def random_forest(X_train, X_test, y_train, y_test):
+    """
+    Builds, trains, tests, and evaluates a Random Forest classification model.
+
+    Parameters:
+        X_train : Training features
+        X_test  : Testing features
+        y_train : Training labels
+        y_test  : Testing labels
+
+    Returns:
+        rf_model : Trained Random Forest model
+        y_pred   : Predictions on the test set
+    """
+
+    # ---------------- MODEL INITIALIZATION ----------------
+    print("Initializing Random Forest Classifier...")
+    rf_model = RandomForestClassifier(
+        n_estimators=100,
+        random_state=42,
+        n_jobs=-1
+    )
+
+    # ---------------- MODEL TRAINING ----------------
+    print("Training Random Forest model...")
+    rf_model.fit(X_train, y_train)
+
+    # ---------------- PREDICTION ----------------
+    print("Generating predictions...")
+    y_pred = rf_model.predict(X_test)
+
+    # ---------------- MODEL EVALUATION ----------------
+    print("\n" + "=" * 40)
+    print("Random Forest Model Evaluation")
+    print("=" * 40)
+
+    # Classification Report
+    print("\nClassification Report:\n")
+    print(classification_report(y_test, y_pred))
+
+    # Confusion Matrix
+    cm = confusion_matrix(y_test, y_pred)
+
+    print("\nConfusion Matrix:")
+    print(cm)
+
+    # Accuracy
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"\nAccuracy: {accuracy:.4f}")
+
+    # Plot Confusion Matrix
+    plt.figure(figsize=(6, 5))
+    sns.heatmap(
+        cm,
+        annot=True,
+        fmt='d',
+        cmap='Blues',
+        cbar=False,
+        xticklabels=['Not Approved', 'Approved'],
+        yticklabels=['Not Approved', 'Approved']
+    )
+
+    plt.xlabel("Predicted Label")
+    plt.ylabel("True Label")
+    plt.title("Confusion Matrix - Random Forest")
+    plt.show()
+
+    return rf_model, y_pred
